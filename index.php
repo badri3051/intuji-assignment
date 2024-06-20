@@ -72,7 +72,7 @@ else {
         else {
     ?>
       <li class="nav-item">
-        <a class="nav-link" href="create_event.php">Create Event</a>
+        <a class="nav-link" href="create.php">Create Event</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="delete_event.php">Delete Event</a>
