@@ -3,16 +3,16 @@ ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
 require 'config.php';
+if(!isset($_SESSION)) 
+    { 
+        session_start(); 
+    } 
 
 if(!isset($_SESSION['access_token']) && !isset($_GET['code'])){
     $authUrl = $client->createAuthUrl();
     header('Location: ' . filter_var($authUrl, FILTER_SANITIZE_URL));
-    echo '<a href="' . filter_var($authUrl, FILTER_SANITIZE_URL) . '">Connect to Google Calendar</a>';
-} elseif (isset($_GET['code'])) {
-    $client->authenticate($_GET['code']);
-    $_SESSION['access_token'] = $client->getAccessToken();
-    header('Location: ' . filter_var('index.php', FILTER_SANITIZE_URL));
-}
+    //echo '<a href="' . filter_var($authUrl, FILTER_SANITIZE_URL) . '">Connect to Google Calendar</a>';
+} 
 
 if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
     $client->setAccessToken($_SESSION['access_token']);
@@ -30,10 +30,7 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
             'end' => $event->getEnd()->getDateTime()
         ];
     }
-    // print_r($eventList); exit;
-?>
-  
-<?php
+ 
 } // End if ! isset($_SESSION['access_token']
 else {
     $authUrl = $client->createAuthUrl();
