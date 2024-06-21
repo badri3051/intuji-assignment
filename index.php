@@ -12,7 +12,11 @@ if(!isset($_SESSION['access_token']) && !isset($_GET['code'])){
     $authUrl = $client->createAuthUrl();
     header('Location: ' . filter_var($authUrl, FILTER_SANITIZE_URL));
     //echo '<a href="' . filter_var($authUrl, FILTER_SANITIZE_URL) . '">Connect to Google Calendar</a>';
-} 
+} elseif (isset($_GET['code'])) {
+    $client->authenticate($_GET['code']);
+    $_SESSION['access_token'] = $client->getAccessToken();
+    header('Location: ' . filter_var('index.php', FILTER_SANITIZE_URL));
+}
 
 if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
     $client->setAccessToken($_SESSION['access_token']);
@@ -34,7 +38,7 @@ if (isset($_SESSION['access_token']) && $_SESSION['access_token']) {
 } // End if ! isset($_SESSION['access_token']
 else {
     $authUrl = $client->createAuthUrl();
-    echo '<a href="' . filter_var($authUrl, FILTER_SANITIZE_URL) . '">Connect to Google Calendar</a>';
+    //echo '<a href="' . filter_var($authUrl, FILTER_SANITIZE_URL) . '">Connect to Google Calendar</a>';
 }
 
 ?>
@@ -59,11 +63,11 @@ else {
     <?php
         if(! isset($_SESSION['access_token']) ){
             $authUrl = $client->createAuthUrl();
-            echo '<a href="' . filter_var($authUrl, FILTER_SANITIZE_URL) . '">Connect to Google Calendar</a>';
-            ?>
-            <li class="nav-item">
-                <a class="nav-link" href="create_event.php">Create Event</a>
-            </li>
+    ?>
+        <li class="nav-item">
+           <?php  echo '<a class="nav-link"  href="' . filter_var($authUrl, FILTER_SANITIZE_URL) . '">Connect to Google Calendar </a>'; ?>
+        </li>   
+           
     <?php 
         } // End if  ! isset($_SESSION['access_token'] 
         else {
@@ -93,7 +97,9 @@ else {
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($eventList as $event): ?>
+            <?php 
+            if(isset($eventList) ){
+            foreach ($eventList as $event): ?>
                 <tr>
                     <td><?php echo htmlspecialchars($event['summary']); ?></td>
                     <td><?php echo htmlspecialchars($event['start']); ?></td>
@@ -102,7 +108,7 @@ else {
                         <button class="btn btn-danger delete-btn" data-id="<?php echo $event['id']; ?>">Delete</button>
                     </td>
                 </tr>
-            <?php endforeach; ?>
+            <?php endforeach; } ?>
         </tbody>
     </table>
 </div>
