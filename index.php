@@ -75,7 +75,7 @@ else {
         <a class="nav-link" href="create.php">Create Event</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="delete_event.php">Delete Event</a>
+        <a class="nav-link" href="delete.php">Delete Event</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="disconnect.php">Disconnect</a>
@@ -119,7 +119,7 @@ else {
 $(document).ready(function() {
     $('#eventsTable').DataTable();
 
-    $('.delete-btn').click(function() {
+    $("#eventsTable").find('.delete-btn').click(function() {
         var eventId = $(this).data('id');
         if (confirm('Are you sure you want to delete this event?')) {
             $.ajax({
